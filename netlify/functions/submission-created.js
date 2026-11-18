@@ -1,5 +1,5 @@
 // Runs automatically on every Netlify form submission and sends it to your Telegram admin chat.
-exports.handler = async (event) => {
+export const handler = async (event) => {
   const { payload } = JSON.parse(event.body);
   if (payload.form_name !== "orders") return { statusCode: 200 };
   const token = process.env.TELEGRAM_BOT_TOKEN, chat = process.env.TELEGRAM_CHAT_ID;
