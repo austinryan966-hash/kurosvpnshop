@@ -21,6 +21,7 @@ const CONFIG = {
     { id: "ultimate", name: "Ultimate", price: 9000, data: "200 GB" }
   ],
   faq: [
+    ["Where is the server located?", "Our VPN server is based in Germany."],
     ["What is Outline?", "Outline is a free VPN app. After payment we send you an access key, you paste it into the app, and you're connected."],
     ["Which devices can I use?", "Android, iPhone, iPad, Windows, macOS and Linux. Every plan supports multiple devices."],
     ["Do data packs expire?", "No. Data packs have no calendar expiry. They stay valid until all the purchased data is used."],

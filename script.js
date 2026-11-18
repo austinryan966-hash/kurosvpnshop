@@ -19,7 +19,7 @@ const planCard = (p, limited) => `
     <ul>
       <li>Data: ${p.data}</li>
       <li>${limited ? "Valid until all data is used" : "Duration: " + p.duration}</li>
-      <li>Multiple devices</li><li>Outline access key</li>
+      <li>Germany-based server</li><li>Multiple devices</li><li>Outline access key</li>
     </ul>
     <button class="btn" data-buy="${p.id}">Buy now</button>
   </article>`;
