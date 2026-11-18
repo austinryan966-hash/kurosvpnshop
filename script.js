@@ -1,36 +1,3 @@
-/* ============ EDIT YOUR BUSINESS INFO HERE ============ */
-const CONFIG = {
-  brand: "GreenShield VPN",
-  telegram: "usaginokitsune",   // main contact, without @
-  team: ["usaginokitsune", "austin3930", "lilia3930"],
-  currency: "MMK",
-  payments: [                                  // update account details
-    { name: "KBZPay",  number: "09966433216", holder: "Shan Htet Naing" },
-    { name: "WavePay", number: "09966433216", holder: "Shan Htet Naing" },
-    { name: "AYA Pay", number: "09786092566", holder: "Kyaw Swar Win" }
-  ],
-  unlimited: [
-    { id: "monthly", name: "Monthly Unlimited", price: 3000,  duration: "30 Days",  data: "Unlimited", best: false },
-    { id: "yearly",  name: "Yearly Unlimited",  price: 30000, duration: "365 Days", data: "Unlimited", best: true, badge: "Best value" }
-  ],
-  limited: [
-    { id: "starter",  name: "Starter",  price: 1000, data: "10 GB" },
-    { id: "basic",    name: "Basic",    price: 2000, data: "30 GB" },
-    { id: "standard", name: "Standard", price: 3000, data: "50 GB" },
-    { id: "premium",  name: "Premium",  price: 5000, data: "100 GB", best: true, badge: "Popular" },
-    { id: "ultimate", name: "Ultimate", price: 9000, data: "200 GB" }
-  ],
-  faq: [
-    ["What is Outline?", "Outline is a free VPN app. After payment we send you an access key, you paste it into the app, and you're connected."],
-    ["Which devices can I use?", "Android, iPhone, iPad, Windows, macOS and Linux. Every plan supports multiple devices."],
-    ["Do data packs expire?", "No. Data packs have no calendar expiry. They stay valid until all the purchased data is used."],
-    ["How do I pay?", "Use KBZPay, WavePay or AYA Pay. Transfer the exact total, then send your screenshot on Telegram."],
-    ["How long until I get my key?", "Our admin verifies each payment manually, then sends your Outline key on Telegram."],
-    ["Are there any hidden fees?", "No. The total shown in the order form is the total you pay."]
-  ]
-};
-/* ======================================================== */
-
 const $ = (s, r = document) => r.querySelector(s);
 const fmt = n => n.toLocaleString("en-US") + " " + CONFIG.currency;
 const tgUser = CONFIG.telegram.replace("@", "");
@@ -88,7 +55,8 @@ $("#faq-list").addEventListener("click", e => {
 
 /* Order form */
 const modal = $("#modal"), fPlan = $("#f-plan"), fPay = $("#f-pay");
-fPlan.innerHTML = allPlans.map(p => `<option value="${p.id}">${p.name} · ${p.data}${p.duration ? " · " + p.duration : " · until used"} · ${fmt(p.price)}</option>`).join("");
+const opt = p => `<option value="${p.id}">${p.name} · ${p.data}${p.duration ? " · " + p.duration : " · until used"} · ${fmt(p.price)}</option>`;
+fPlan.innerHTML = `<optgroup label="Unlimited plans">${allPlans.filter(p => p.type === "Unlimited").map(opt).join("")}</optgroup><optgroup label="Data packs (valid until used)">${allPlans.filter(p => p.type !== "Unlimited").map(opt).join("")}</optgroup>`;
 fPay.innerHTML = CONFIG.payments.map(p => `<option>${p.name}</option>`).join("");
 const cur = () => allPlans.find(p => p.id === fPlan.value);
 
@@ -97,7 +65,7 @@ function buildSummary() {
   return [`New order – ${CONFIG.brand}`, `VPN: Outline`, `Package: ${p.name} (${p.data}${p.duration ? ", " + p.duration : ", valid until data is used"})`,
     `Name: ${name}`, `Telegram: ${tg}`, `Payment: ${fPay.value}`, `Total: ${fmt(p.price)}`].join("\n");
 }
-function refresh() { $("#f-total").textContent = fmt(cur().price); $("#summary").textContent = buildSummary(); $("#h-total").value = fmt(cur().price); $("#h-summary").value = buildSummary(); }
+function refresh() { $("#f-total").textContent = fmt(cur().price); $("#summary").textContent = buildSummary(); }
 const openModal = id => { $("#order").hidden = false; $("#ok").hidden = true; if (id) fPlan.value = id; refresh(); modal.hidden = false; document.body.style.overflow = "hidden"; $("#f-name").focus(); };
 const closeModal = () => { modal.hidden = true; document.body.style.overflow = ""; };
 
@@ -124,10 +92,11 @@ $("#order").addEventListener("submit", async e => {
   e.preventDefault(); if (!valid()) return;
   const btn = $("#f-submit"); btn.disabled = true; btn.textContent = "Sending...";
   try {
-    const r = await fetch("/", { method: "POST", body: new FormData(e.target) });
-    if (!r.ok) throw new Error(r.status);
+    const fd = new FormData(e.target); fd.set("screenshot", await shrink($("#f-file").files[0]), "proof.jpg");
+    const r = await fetch("/api/order", { method: "POST", body: fd });
+    if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || "Server error " + r.status); }
     $("#order").hidden = true; $("#ok").hidden = false; e.target.reset(); $("#preview").hidden = true;
-  } catch { $("#err").textContent = "Could not send the order. Try again or use Order on Telegram instead."; }
+  } catch (x) { $("#err").textContent = (x.message || "Could not send the order") + ". Try again or use Order on Telegram instead."; }
   btn.disabled = false; btn.textContent = "Submit order";
 });
 $("#ok-close").onclick = closeModal;
@@ -141,3 +110,15 @@ menu.addEventListener("click", e => { if (e.target.closest("a")) { menu.classLis
 document.querySelectorAll(".card").forEach(c => c.classList.add("reveal"));
 const io = new IntersectionObserver(es => es.forEach(x => { if (x.isIntersecting) { x.target.classList.add("in"); io.unobserve(x.target); } }), { threshold: .1 });
 document.querySelectorAll(".reveal").forEach(e => io.observe(e));
+
+/* Shrink screenshots before upload (keeps requests small and fast) */
+const shrink = file => new Promise(res => {
+  const img = new Image(), u = URL.createObjectURL(file);
+  img.onload = () => {
+    const k = Math.min(1, 1400 / Math.max(img.width, img.height)), c = document.createElement("canvas");
+    c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+    c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+    c.toBlob(b => res(b || file), "image/jpeg", .82); URL.revokeObjectURL(u);
+  };
+  img.onerror = () => res(file); img.src = u;
+});
