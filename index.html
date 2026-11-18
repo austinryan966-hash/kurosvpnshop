@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>GreenShield VPN – Outline VPN for Myanmar</title>
+<title>Outline VPN – Fast, private VPN for Myanmar</title>
 <meta name="description" content="Affordable Outline VPN for Myanmar. Unlimited and data plans in MMK. Order via Telegram.">
 <link rel="icon" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,7 +24,7 @@
 <section id="home" class="hero">
   <div class="wrap hero-grid">
     <div>
-      <p class="pill">Outline VPN · Made for Myanmar</p>
+      <p class="pill">Made for Myanmar · Works on every device</p>
       <h1>Open internet,<br>one tap away.</h1>
       <p class="lead">Fast, private access on every device. Pay in Kyat with KBZPay, WavePay or AYA Pay, and get your Outline key on Telegram.</p>
       <div class="cta">
@@ -112,7 +112,7 @@
 </main>
 
 <footer><div class="wrap foot">
-  <span>© <span id="yr"></span> <span data-brand></span>. All prices in MMK.</span>
+  <span>© <span id="yr"></span> <span data-brand></span>. All prices in MMK. Independent service using the free Outline app.</span>
   <a href="#home">Back to top</a>
 </div></footer>
 
@@ -120,10 +120,8 @@
   <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="m-title">
     <button class="close" id="m-close" aria-label="Close">×</button>
     <h3 id="m-title">Place your order</h3>
-    <form id="order" name="orders" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" enctype="multipart/form-data" novalidate>
-      <input type="hidden" name="form-name" value="orders">
-      <p hidden><label>Leave empty <input name="bot-field"></label></p>
-      <input type="hidden" name="total" id="h-total"><input type="hidden" name="summary" id="h-summary">
+    <form id="order" novalidate>
+      <p hidden><label>Leave empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <label>Package<select id="f-plan" name="package"></select></label>
       <label>Your name<input id="f-name" name="customer_name" placeholder="e.g. Aung Aung" autocomplete="name"></label>
       <label>Telegram username<input id="f-tg" name="telegram" placeholder="@username" autocomplete="off"></label>
@@ -145,5 +143,6 @@
   </div>
 </div>
 <div id="toast" role="status"></div>
+<script src="config.js"></script>
 <script src="script.js"></script>
 </body></html>
