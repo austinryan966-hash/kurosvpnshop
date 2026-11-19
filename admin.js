@@ -12,10 +12,10 @@ function logout(msg) { key = ""; sessionStorage.removeItem("ak"); show(false); $
 async function load() {
   try {
     const r = await api("/api/orders");
-    if (r.status === 401) return logout("Wrong password, or ADMIN_PASSWORD is not set in Netlify.");
+    if (r.status === 401) return logout("Wrong password, or ADMIN_PASSWORD is not set in Cloudflare.");
     if (!r.ok) throw 0;
     orders = await r.json(); show(true); draw();
-  } catch { $("#msg").textContent = "Could not load orders. Make sure the site is deployed on Netlify with functions."; }
+  } catch { $("#msg").textContent = "Could not load orders. Check that the KV binding ORDERS and ADMIN_PASSWORD are set in Cloudflare, then redeploy."; }
 }
 const card = o => {
   const p = plans.find(x => x.id === o.package), b = a => `data-act="${a}" data-id="${o.id}"`;
@@ -50,4 +50,4 @@ $(".fbar").addEventListener("click", e => { const b = e.target.closest(".flt"); 
 $("#login").addEventListener("submit", e => { e.preventDefault(); key = $("#pw").value; sessionStorage.setItem("ak", key); $("#msg").textContent = ""; load(); });
 $("#refresh").onclick = load; $("#logout").onclick = () => logout();
 if (key) load();
-setInterval(() => key && load(), 30000);
+setInterval(() => key && !document.hidden && load(), 60000);
