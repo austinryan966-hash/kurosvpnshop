@@ -5,7 +5,7 @@
 <meta name="description" content="Affordable Outline VPN for Myanmar. Unlimited and data plans in MMK. Order via Telegram.">
 <link rel="icon" href="assets/logo.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&family=Noto+Sans+Myanmar:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head><body>
 <div id="loader"><img src="assets/logo.svg" alt="" width="56" height="56"></div>
@@ -14,10 +14,11 @@
   <a class="brand" href="#home"><img src="assets/logo.svg" alt="" width="30" height="30"><span data-brand></span></a>
   <nav id="menu">
     <a href="#why">Why us</a><a href="#pricing">Pricing</a><a href="#outline">Outline</a>
-    <a href="#how">How to buy</a><a href="#payment">Payment</a><a href="#faq">FAQ</a>
+    <a href="#how">How to buy</a><a href="#payment">Payment</a><a href="#guide">Guide</a><a href="#faq">FAQ</a>
     <a class="btn sm" href="#pricing">Get started</a>
   </nav>
-  <button id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  <div class="hr"><div class="lang" role="group" aria-label="Language"><button data-lang="en" class="on">EN</button><button data-lang="mm">မြန်မာ</button></div>
+    <button id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button></div>
 </header>
 
 <main>
@@ -46,7 +47,7 @@
 </section>
 
 <section id="why"><div class="wrap">
-  <h2>Why choose <span data-brand></span>?</h2>
+  <h2>Why choose us?</h2>
   <p class="sub">Simple service, honest prices.</p>
   <div class="grid g3">
     <article class="card"><div class="ico">⚡</div><h3>Germany-based server</h3><p>Connect through Germany for everyday browsing, streaming and social apps.</p></article>
@@ -85,7 +86,7 @@
   <div class="grid g4 steps">
     <article class="card"><span class="num">1</span><h3>Pick a plan</h3><p>Press Buy now on the plan you want.</p></article>
     <article class="card"><span class="num">2</span><h3>Fill the form</h3><p>Enter your name and Telegram username.</p></article>
-    <article class="card"><span class="num">3</span><h3>Pay and send proof</h3><p>Transfer the exact total, then send the screenshot in Telegram.</p></article>
+    <article class="card"><span class="num">3</span><h3>Pay and send proof</h3><p>Transfer the exact total, then upload your screenshot in the form.</p></article>
     <article class="card"><span class="num">4</span><h3>Get your key</h3><p>We verify your payment by hand, then send your Outline key.</p></article>
   </div>
 </div></section>
@@ -94,6 +95,14 @@
   <h2>Payment methods</h2>
   <p class="sub">Transfer the exact total, then send your screenshot. Payments are verified manually by our admin.</p>
   <div id="pay-grid" class="grid g3"></div>
+</div></section>
+
+<section id="guide" class="alt"><div class="wrap">
+  <h2>How to use your VPN key</h2>
+  <p class="sub">Follow these steps after you receive your Outline key on Telegram.</p>
+  <div class="tabs" id="g-tabs" role="tablist"></div>
+  <div id="g-steps" class="grid g2"></div>
+  <p class="note">Tap an image to enlarge it.</p>
 </div></section>
 
 <section id="faq" class="alt"><div class="wrap narrow">
@@ -123,14 +132,15 @@
     <form id="order" novalidate>
       <p hidden><label>Leave empty <input name="bot-field" tabindex="-1" autocomplete="off"></label></p>
       <label>Package<select id="f-plan" name="package"></select></label>
+      <div id="paybox"><h4 class="ph">Choose payment method</h4><div id="pm-cards" class="pm-cards"></div><div id="pm-detail" class="pm-detail"></div></div>
       <label>Your name<input id="f-name" name="customer_name" placeholder="e.g. Aung Aung" autocomplete="name"></label>
       <label>Telegram username<input id="f-tg" name="telegram" placeholder="@username" autocomplete="off"></label>
-      <label>Payment method<select id="f-pay" name="payment_method"></select></label>
+      <label hidden>Payment method<select id="f-pay" name="payment_method"></select></label>
       <label>Payment screenshot (proof of payment)
         <input id="f-file" name="screenshot" type="file" accept="image/*">
       </label>
       <img id="preview" alt="Screenshot preview" hidden>
-      <p class="hint">Pay first using the details in the Payment section, then upload your screenshot. We verify every payment by hand.</p>
+      <p class="hint">Pay using the details above, then upload your screenshot here. We verify every payment by hand.</p>
       <div class="total"><span>Total</span><b id="f-total"></b></div>
       <pre id="summary"></pre>
       <p id="err" class="err" role="alert"></p>
@@ -142,7 +152,9 @@
     <div id="ok" hidden><h3>Order received ✅</h3><p>Thanks! We will check your payment and send your Outline key on Telegram.</p><br><button class="btn" type="button" id="ok-close">Done</button></div>
   </div>
 </div>
+<div id="lightbox" hidden><img alt=""></div>
 <div id="toast" role="status"></div>
 <script src="config.js"></script>
+<script src="i18n.js"></script>
 <script src="script.js"></script>
 </body></html>
