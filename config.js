@@ -18,7 +18,8 @@ const CONFIG = {
   ],
   unlimited: [
     { id: "monthly", name: "Monthly Unlimited", price: 3000,  duration: "30 Days",  data: "Unlimited", best: false },
-    { id: "yearly",  name: "Yearly Unlimited",  price: 30000, duration: "365 Days", data: "Unlimited", best: true, badge: "Best value" }
+    { id: "yearly",  name: "Yearly Unlimited",  price: 30000, duration: "365 Days", data: "Unlimited", best: true, badge: "Best value" },
+    { id: "lifetime", name: "Lifetime Unlimited", price: 75000, duration: "Lifetime", data: "Unlimited" }
   ],
   limited: [
     { id: "starter",  name: "Starter",  price: 1000, data: "10 GB" },

@@ -36,16 +36,6 @@ document.querySelectorAll("#pricing .tab").forEach(t => t.addEventListener("clic
 }));
 
 /* Payment cards */
-const renderPayGrid = () => { $("#pay-grid").innerHTML = CONFIG.payments.map((p, i) => `
-  <article class="card pay reveal">
-    <h3>${p.name}</h3>
-    <div class="acct"><b>${p.number}</b><button class="copy" data-copy="${i}">${t("Copy")}</button></div>
-    <p>${t("Account name")}: ${p.holder}</p>
-  </article>`).join(""); };
-renderPayGrid();
-$("#pay-grid").addEventListener("click", e => {
-  const b = e.target.closest("[data-copy]"); if (b) copy(CONFIG.payments[b.dataset.copy].number.replace(/\s/g, ""));
-});
 
 /* FAQ accordion */
 const renderFaq = () => { $("#faq-list").innerHTML = CONFIG.faq.map(([q, a]) => `
@@ -171,8 +161,8 @@ function setLang(l) {
   lang = l; try { localStorage.setItem("lang", l); } catch {}
   document.documentElement.lang = l === "mm" ? "my" : "en"; document.body.classList.toggle("mm", l === "mm");
   document.querySelectorAll("[data-lang]").forEach(b => b.classList.toggle("on", b.dataset.lang === l));
-  renderPlans(); renderPayGrid(); renderFaq(); renderGuide(); fillPlans(); payCards(); refresh(); translateDom();
-  document.querySelectorAll("#grid-unlimited .reveal, #grid-limited .reveal, #pay-grid .reveal").forEach(e => e.classList.add("in"));
+  renderPlans(); renderFaq(); renderGuide(); fillPlans(); payCards(); refresh(); translateDom();
+  document.querySelectorAll("#grid-unlimited .reveal, #grid-limited .reveal").forEach(e => e.classList.add("in"));
 }
 document.querySelectorAll("[data-lang]").forEach(b => b.onclick = () => setLang(b.dataset.lang));
 renderGuide(); payCards();
